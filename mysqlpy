@@ -1,0 +1,41 @@
+import mysql.connector
+import datetime
+import time
+
+# MySQL server details
+mysql_host = "localhost"
+mysql_user = "root"
+mysql_password = "admin"
+mysql_db = "mysql"
+
+# Define the new password and the interval to change it
+new_password = "admin123"
+change_interval_days = 30
+
+while True:
+    # Calculate the date when the password should be changed
+    change_date = datetime.datetime.now() + datetime.timedelta(days=change_interval_days)
+
+    # Connect to the MySQL server
+    try:
+        conn = mysql.connector.connect(host=mysql_host, user=mysql_user, password=mysql_password, database=mysql_db)
+        cursor = conn.cursor()
+
+        # Update the root password
+        cursor.execute("ALTER USER 'root'@'localhost' IDENTIFIED BY %s", (new_password,))
+        conn.commit()
+
+        # Print the success message
+        print(f"Root password updated successfully at {datetime.datetime.now()}")
+
+        # Wait until the password change date
+        time.sleep((change_date - datetime.datetime.now()).total_seconds())
+
+    except mysql.connector.Error as error:
+        print("Error updating root password: {}".format(error))
+
+    finally:
+        # Close the database connection
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
