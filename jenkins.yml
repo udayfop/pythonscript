@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from Git repository
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'your-credentials-id', url: 'your-git-repository-url']]])
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                // Install Node.js dependencies
+                sh 'npm install'
+            }
+        }
+        stage('Build') {
+            steps {
+                // Build Node.js application
+                sh 'npm run build'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Deploy Node.js application on remote server using SSH
+                sshagent(['your-credentials-id']) {
+                    sh 'ssh your-server-user@your-server-ip "cd /path/to/deploy && git pull origin master && pm2 restart your-app-name"'
+                }
+            }
+        }
+    }
+}
