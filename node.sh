@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Change to the directory of your Node.js application
-cd /path/to/your/node/app
+cd /home/ubuntu/admin
 
 # Install dependencies
 npm install
