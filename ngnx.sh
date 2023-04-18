@@ -11,9 +11,9 @@ sudo apt-get install -y nginx
 sudo systemctl start nginx
 sudo systemctl enable nginx
 
-# Check nginx version
-nginx -v
 
 # Verify the installation by checking the status of Nginx
 sudo systemctl status nginx
 
+# Check nginx version
+nginx -v
